@@ -1,0 +1,68 @@
+//  https://cses.fi/problemset/task/1092/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+#define mod 1000000007
+#define vll vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+#define vch vector<char>
+#define vvll vector<vector<ll>>
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+
+void solve()
+{
+    ll n,sum;
+    cin>>n;
+    sum=(n*(n+1))/2;
+    if(sum%2!=0)
+    {
+        cout<<"NO\n";
+        return;
+    }
+    cout<<"YES\n";
+    sum/=2;
+    unordered_set<ll> st;
+    for(int i=0;i<n;i++)
+        st.insert(i+1);
+    vll v1;
+    for(ll i=n;i>=0;i--)
+    {
+        if(sum > i)
+        {
+            v1.push_back(i);
+            st.erase(i);
+            sum-=i;
+        }
+        else
+        {
+            v1.push_back(sum);
+            st.erase(sum);
+            break;
+        }
+    }
+    cout<<v1.size()<<endl;
+    for(auto i: v1)
+        cout<<i<<" ";
+    cout<<endl;
+    cout<<st.size()<<endl;
+    for(auto& i: st)
+        cout<<i<<" ";
+    cout<<endl;
+
+}
+
+int main()
+{
+    fastio();
+    ll t=1;
+    // cin>>t;
+    while(t--)
+    {
+        solve();
+    }
+    return 0;
+}
