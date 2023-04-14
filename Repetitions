@@ -1,0 +1,44 @@
+//https://cses.fi/problemset/task/1069/
+
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define ll long long int
+#define mod 1000000007
+#define vll vector<ll>
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+#define vch vector<char>
+#define vvll vector<vector<ll>>
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+ 
+void solve()
+{
+    string s;
+    cin>>s;
+    ll ans=1;
+    for(int i=1;i<s.size();i++)
+    {
+        ll temp=1;
+        while(i<s.size() && s[i-1]==s[i])
+        {
+            temp++;
+            i++;
+        }
+        ans=max(temp,ans);
+    }
+    cout<<ans<<endl;
+}
+ 
+int main()
+{
+    fastio();
+    ll t=1;
+    // cin>>t;
+    while(t--)
+    {
+        solve();
+    }
+    return 0;
+}
