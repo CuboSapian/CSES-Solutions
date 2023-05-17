@@ -1,0 +1,110 @@
+// https://cses.fi/problemset/task/1666/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+#define mod 1000000007
+#define vll vector<ll>
+#define pb push_back
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+#define vch vector<char>
+#define vvll vector<vector<ll>>
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+
+class DSU {
+    vector<int> rank, parent, size; 
+public:
+    // CONSTRUCTOR
+    DSU(int n) {
+        rank.resize(n+1, 0); 
+        parent.resize(n+1);
+        size.resize(n+1); 
+        for(int i = 0;i<=n;i++) {
+            parent[i] = i; 
+            size[i] = 1; 
+        }
+    }
+
+    //FIND ULTIMATE PARENT OF A NODE
+    int findUPar(int node) {
+        return parent[node] = node==parent[node] ? node : findUPar(parent[node]); 
+    }
+
+    //Find NUMBER OF COMPONENTS IN A GRAPH
+    set<int> totalComponents()
+    {
+        set<int> st;
+        for(int i=1;i<rank.size();i++)
+        st.insert(findUPar(i));
+        return st;
+    }
+
+    // UNION BY RANK(SIMILAR TO HEIGHT)
+    void unionByRank(int u, int v) {
+        int ulp_u = findUPar(u); 
+        int ulp_v = findUPar(v); 
+        if(ulp_u == ulp_v) return; 
+        if(rank[ulp_u] < rank[ulp_v])
+            parent[ulp_u] = ulp_v; 
+        else if(rank[ulp_v] < rank[ulp_u])
+            parent[ulp_v] = ulp_u;
+        else {
+            parent[ulp_v] = ulp_u; 
+            rank[ulp_u]++; 
+        }
+    }
+
+    // UNION BY SIZE(NUMBER OF NODES IN THE COMPONENT)
+    void unionBySize(int u, int v) {
+        int ulp_u = findUPar(u); 
+        int ulp_v = findUPar(v); 
+        if(ulp_u == ulp_v) return; 
+        if(size[ulp_u] < size[ulp_v]) {
+            parent[ulp_u] = ulp_v; 
+            size[ulp_v] += size[ulp_u]; 
+        }
+        else {
+            parent[ulp_v] = ulp_u;
+            size[ulp_u] += size[ulp_v]; 
+        }
+    }
+};
+
+
+void solve()
+{
+	ll n,m;
+	cin>>n>>m;
+	DSU grp(n);
+	for(int i=0;i<m;i++)
+	{
+		int a,b;
+		cin>>a>>b;
+		grp.unionByRank(a,b);
+	}
+	set<int> st=grp.totalComponents();
+	cout<<st.size()-1<<endl;
+	int temp=*st.begin();
+	auto it=st.begin();
+	it++;
+	while(it != st.end())
+	{
+		cout<<temp<<" "<<*it<<endl;
+		it++;
+	}
+	return;
+}
+int main()
+{
+	fastio();
+	ll t=1;
+	// cin>>t;
+	while(t--)
+	{
+		solve();
+	}
+	return 0;
+}
