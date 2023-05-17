@@ -1,0 +1,102 @@
+// https://cses.fi/problemset/task/1193/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+#define mod 1000000007
+#define vll vector<ll>
+#define pb push_back
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+#define vch vector<char>
+#define vvll vector<vector<ll>>
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+
+vector<pair<int,int>> pa={{-1,0},{1,0},{0,-1},{0,1}};
+map<pair<int,int>,char> mp;
+
+void solve()
+{
+	ll n,m;
+	cin>>n>>m;
+	vector<string> inp;
+	for(int i=0;i<n;i++)
+	{
+		string s;
+		cin>>s;
+		inp.pb(s);
+	}
+	mp[{1,0}]='U';
+	mp[{-1,0}]='D';
+	mp[{0,1}]='L';
+	mp[{0,-1}]='R';
+	string fans="";
+	vector<pair<int,int>> ans;
+	vector<vector<bool>> vis(n,vector<bool>(m,false));
+	vector<vector<pair<int,int>>> vpp(n,vector<pair<int,int>>(m));
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<m;j++)
+		{
+			if(inp[i][j]=='A')
+			{
+				vpp[i][j]={-1,-1};
+				queue<pair<int,int>> q;
+				q.push({i,j});
+				vis[i][j]=true;
+				while(!q.empty())
+				{
+					auto pr=q.front();
+					q.pop();
+					for(int k=0;k<4;k++)
+					{
+						int x=pr.first + pa[k].first , y=pr.second + pa[k].second;
+						if(x>=0 && x<n && y>=0 && y<m && vis[x][y]==false)
+						{
+							vis[x][y]=true;
+							if(inp[x][y]=='.')
+							{
+								vpp[x][y]=pr;
+								q.push({x,y});
+							}
+							if(inp[x][y]=='B')
+							{
+								vpp[x][y]=pr;
+								pair<int,int> temp={x,y} , chk={-1,-1};
+								while(temp != chk)
+								{
+									ans.push_back(temp);
+									temp=vpp[temp.first][temp.second];
+								}
+								for(int i=0;i<ans.size()-1;i++)
+								{
+									pair<int,int> tmp={ans[i+1].first - ans[i].first , ans[i+1].second - ans[i].second};
+									fans.push_back(mp[tmp]);
+								}
+								reverse(fans.begin(),fans.end());
+								cout<<"YES\n"<<fans.size()<<endl;
+								cout<<fans<<endl;
+								return;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	cout<<"NO\n";
+	return;
+}
+int main()
+{
+	fastio();
+	ll t=1;
+	// cin>>t;
+	while(t--)
+	{
+		solve();
+	}
+	return 0;
+}
