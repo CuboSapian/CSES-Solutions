@@ -1,0 +1,55 @@
+// https://cses.fi/problemset/task/1635/
+
+#include<bits/stdc++.h>
+using namespace std;
+
+#define ll long long int
+#define mod 1000000007
+#define vll vector<ll>
+#define pb push_back
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+#define vch vector<char>
+#define vvll vector<vector<ll>>
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+
+ll rec(ll x,vll& v , vll& dp)
+{
+	if(dp[x] != -1)
+		return dp[x];
+	if(x==0)
+		return 1;
+	ll ans=0;
+	for(ll i=0;i<v.size() ;i++)
+	{
+		if(v[i] <= x)
+		ans = (ans%mod + rec(x-v[i] , v , dp)%mod)%mod;
+	}
+	return dp[x]=ans;
+}
+
+void solve()
+{
+	ll n,x;
+	cin>>n>>x;
+	vll v(n);
+	vll dp(x+1 , -1);
+	for(auto& i: v)
+		cin>>i;
+	// sort(v.begin(), v.end() , greater<int>());
+	ll ans=rec(x,v,dp);
+	cout<<ans<<endl;
+}
+
+int main()
+{
+	fastio();
+	ll t=1;
+	// cin>>t;
+	while(t--)
+	{
+		solve();
+	}
+	return 0;
+}
