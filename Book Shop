@@ -1,0 +1,81 @@
+// https://cses.fi/problemset/task/1158/
+
+#include<bits/stdc++.h>
+using namespace std;
+ 
+#define ll long long int
+#define mod 1000000007
+#define vll vector<ll>
+#define pb push_back
+#define pll pair<ll,ll>
+#define vpll vector<pll>
+#define vch vector<char>
+#define vvll vector<vector<ll>>
+#define endl "\n"
+#define fastio() ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
+ 
+ll rec(ll idx, ll x, vll& wt, vll& val,ll n,vvll& dp)
+{
+	if(dp[idx][x] != -1)
+		return dp[idx][x];
+	if(idx == n)
+	{
+		return 0;
+	}
+	if(wt[idx] <= x)
+		return dp[idx][x]=max(rec(idx+1 , x - wt[idx], wt, val, n,dp)  + val[idx], rec(idx+1 , x , wt, val, n,dp));
+	else
+		return dp[idx][x]=rec(idx+1 , x, wt, val, n,dp);
+}
+
+void solve()
+{
+	ll n,x;
+	cin>>n>>x;
+	vll wt(n) , val(n);
+	// vvll dp(n+1, vll(x+1 , -1));
+	vll prev(x+1);
+	vll cur(x+1);
+	for(auto &i: wt) cin>>i;
+	for(auto &i: val) cin>>i;
+
+	for(int i=0;i<=n;i++)
+	{
+		for(int j=0;j<=x;j++)
+		{
+			if(i==0 || j==0)
+			{
+				// dp[i][j]=0;
+				cur[j]=0;
+			}
+			else
+			{
+				// ll notTake= dp[i-1][j] , take=0;
+				ll notTake= prev[j] , take=0;
+				if(wt[i-1] <= j)
+				{
+					// take=dp[i-1][j-wt[i-1]] + val[i-1];
+					take=prev[j-wt[i-1]] + val[i-1];
+				}
+				// dp[i][j]=max(take, notTake);
+				cur[j]=max(take, notTake);
+			}
+		}
+		prev=cur;
+	}
+	cout<<cur[x]<<endl;
+	// cout<<rec(0,x,wt,val,n,dp1)<<endl;
+
+}
+ 
+int main()
+{
+	fastio();
+	ll t=1;
+	// cin>>t;
+	while(t--)
+	{
+		solve();
+	}
+	return 0;
+}
